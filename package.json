@@ -1,0 +1,39 @@
+{
+  "name": "chat-server",
+  "version": "1.0.0",
+  "description": "homework",
+  "homepage": "https://github.com/ChumakovaAnna/AHJ8.2#readme",
+  "bugs": {
+    "url": "https://github.com/ChumakovaAnna/AHJ8.2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChumakovaAnna/AHJ8.2.git"
+  },
+  "license": "ISC",
+  "author": "Chumakova Anna",
+  "main": "server.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "forever server.js",
+    "watch": "forever -w server.js",
+    "lint": "eslint .",
+    "list": "forever list",
+    "stop": "forever stopall"
+  },
+  "dependencies": {
+    "forever": "^4.0.1",
+    "http-event-stream": "^0.2.0",
+    "koa": "^2.13.1",
+    "koa-body": "^4.2.0",
+    "koa-router": "^10.1.1",
+    "koa2-cors": "^2.0.6",
+    "uuid": "^8.3.2",
+    "ws": "^8.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.21.2"
+  }
+}
