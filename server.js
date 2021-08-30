@@ -29,6 +29,39 @@ const messages = [
 
 const router = new Router();
 
+router.get("/test", async (ctx, next) => {
+  ctx.response.body = {
+    status: "ok",
+    timestamp: Date.now(),
+  };
+});
+
+router.post("/check", async (ctx, next) => {
+  const { userName } = ctx.request.body;
+  console.log(ctx.request);
+  if (users.includes(userName)) {
+    ctx.response.body = {
+      access: false,
+      errorMessage: "Такой пользователь уже существует",
+    };
+  } else {
+    users.push(userName);
+    ctx.response.body = {
+      access: true,
+      userName,
+    };
+  }
+});
+
+router.post("/exit", async (ctx, next) => {
+  const { userName } = ctx.request.body;
+  const index = users.findIndex((o) => o === userName);
+  if (index !== -1) {
+    users.splice(index, 1);
+  }
+  ctx.response.status = 204;
+});
+
 app.use(router.routes()).use(router.allowedMethods());
 const server = http.createServer(app.callback());
 const wsServer = new WS.Server({ server });
