@@ -9,7 +9,12 @@ const User = require("./User");
 const Message = require("./Message");
 
 const app = new Koa();
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: true,
+  "Access-Control-Allow-Origin": true,
+  allowMethods: ["GET", "POST", "PUT", "DELETE"],
+}));
 app.use(koaBody({
   urlencoded: true,
   multipart: true,
