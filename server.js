@@ -22,10 +22,6 @@ app.use(koaBody({
   json: true,
 }));
 
-// const users = [
-//   new User("Oleg"),
-//   new User("Max"),
-// ];
 const users = ["oleg", "Max"];
 const messages = [
   new Message("Oleg", "I am first"),
@@ -60,7 +56,6 @@ wsServer.on("connection", (ws, req) => {
         };
         ws.send(JSON.stringify(response));
         if (messages) {
-          console.log(messages);
           const response = {
             type: "messages",
             messages,
@@ -72,19 +67,31 @@ wsServer.on("connection", (ws, req) => {
 
     if (body.type === "newMessage") {
       messages.push(new Message(body.user, body.value));
-      console.log(messages);
       const response = {
         type: "messages",
         messages,
       };
       ws.send(JSON.stringify(response));
+      [...wsServer.clients]
+        .filter((c) => c.readyState === WS.OPEN)
+        .forEach((c) => c.send(JSON.stringify(response)));
     }
-    // [...wsServer.users]
-    //   .filter((c) => c.readyState === WS.OPEN)
-    //   .forEach((c) => c.send('to all', msg));
   });
 
-  // ws.send("welcome", errCallback);
+  ws.on("close", () => {
+    const user = users.findIndex((ele) => ele.name === ws.name);
+    if (user !== -1) {
+      users.splice(user, 1);
+
+      const response = {
+        type: "disconnect",
+        users,
+      };
+      [...wsServer.clients]
+        .filter((c) => c.readyState === WS.OPEN)
+        .forEach((c) => c.send(JSON.stringify(response)));
+    }
+  });
 });
 
 const port = process.env.PORT || 7070;
